@@ -51,6 +51,7 @@ module ActiveRecord::Extensions::FinderOptions
     #alias and include only if not yet defined
     unless base.respond_to?(:construct_finder_sql_ext)
       base.extend ClassMethods
+      base.extend ActiveRecord::Extensions::SqlGeneration
       base.class_eval do
         class << self
           VALID_FIND_OPTIONS.concat([:pre_sql, :post_sql, :keywords, :ignore, :rollup, :override_select, :having])
@@ -135,14 +136,6 @@ module ActiveRecord::Extensions::FinderOptions
     def finder_sql_with_included_associations(options = {})#:nodoc
       join_dependency = ActiveRecord::Associations::ClassMethods::JoinDependency.new(self, merge_includes(scope(:find, :include), options[:include]), options[:joins])
       sql = construct_finder_sql_with_included_associations_with_ext(options, join_dependency)
-    end
-      
-    def post_sql_statements(options)#:nodoc
-      connection.post_sql_statements(quoted_table_name, options).join(' ')
-    end
-    
-    def pre_sql_statements(options)#:nodoc
-      connection.pre_sql_statements({:command => 'SELECT'}.merge(options)).join(' ').strip + " "
     end
     
     def add_having!(sql, options, scope = :auto)#:nodoc
