@@ -67,14 +67,13 @@ module ActiveRecord::Extensions::FinderOptions
     # The options are the same as those with find(:all)
     #
     # Additional parameter of
-    # <tt>:include_associations</tt> forces eager loading even if the
+    # <tt>:force_eager_load</tt> forces eager loading even if the
     #  column is not referenced.
     #
     #   sql = Contact.finder_sql_to_string(:include => :primary_email_address)
     #   Contact.find_by_sql(sql + 'USE_INDEX(blah)')
     def finder_sql_to_string(options)
       
-
       select_sql = self.send(
         (use_eager_loading_sql?(options) ? :finder_sql_with_included_associations : :construct_finder_sql),
         options.reject{|k,v| k == :force_eager_load}).strip

@@ -1,3 +1,4 @@
+ENV['ARE_DB'] = 'mysql'
 dir = File.dirname( __FILE__ )
 begin ; require 'active_record' ; rescue LoadError; require 'rubygems'; require 'active_record'; end
 require File.join( dir, 'connections', "native_#{ENV["ARE_DB"]}", 'connection.rb' )
