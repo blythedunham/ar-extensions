@@ -1,6 +1,6 @@
 require File.expand_path( File.join( File.dirname( __FILE__ ), 'test_helper' ) )
 
-class FindersTest < Test::Unit::TestCase
+class FindersTest< TestCaseSuperClass
   include ActiveRecord::ConnectionAdapters
   self.fixture_path = File.join( File.dirname( __FILE__ ), 'fixtures/unit/active_record_base_finders' )
   self.fixtures 'developers', 'books'
@@ -63,11 +63,11 @@ class FindersTest < Test::Unit::TestCase
   end
   
   def test_find_by_range
-    # there is no difference between ( x..z ) and ( x...z )
+    # ( x...z )  == (x..(z-1))    
     developers = Developer.find( :all, :conditions=>{ :id=>(1..2) } )
     assert_equal( 2, developers.size )
     developers = Developer.find( :all, :conditions=>{ :id=>(1...2) } )
-    assert_equal( 2, developers.size )
+    assert_equal( 1, developers.size )
   end
 
   def test_find_by_range_with_reserved_words

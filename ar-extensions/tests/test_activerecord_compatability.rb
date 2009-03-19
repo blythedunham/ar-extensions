@@ -1,6 +1,6 @@
 require File.expand_path( File.join( File.dirname( __FILE__ ), 'test_helper' ) )
 
-class FindersTest < Test::Unit::TestCase
+class FindersTest< TestCaseSuperClass
   include ActiveRecord::ConnectionAdapters
 
   def setup
@@ -56,15 +56,16 @@ class FindersTest < Test::Unit::TestCase
     end
   end
   
-  def test_find_with_hash_conditions_and_joins
-    Topic.destroy_all
-    Book.destroy_all
-    topic = Topic.create! :author_name => "Zach Dennis", :title => "Books by Brooks"
-    sword_of_shannara_book = Book.create!(:title => "Sword of Shannara", :author_name => "Terry Brooks", :publisher => "DelRey")
-    topic.books << sword_of_shannara_book
-    found_topic = Topic.find(:all, :conditions => {:books => {:title => "Sword of Shannara"}}, :joins => :books)
-    assert_equal [topic], found_topic
+  if ActiveRecord::VERSION::STRING >= '2.2.0'
+    def test_find_with_hash_conditions_and_joins
+      Topic.destroy_all
+      Book.destroy_all
+      topic = Topic.create! :author_name => "Zach Dennis", :title => "Books by Brooks"
+      sword_of_shannara_book = Book.create!(:title => "Sword of Shannara", :author_name => "Terry Brooks", :publisher => "DelRey")
+      topic.books << sword_of_shannara_book
+      found_topic = Topic.find(:all, :conditions => {:books => {:title => "Sword of Shannara"}}, :joins => :books)
+      assert_equal [topic], found_topic
+    end
   end
-
   
 end

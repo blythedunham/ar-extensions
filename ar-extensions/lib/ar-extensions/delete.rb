@@ -24,7 +24,7 @@ class ActiveRecord::Base
       #
       # == Options
       # * <tt>:limit</tt> - the maximum number of records to delete.
-      # * <tt>:batch</tt> - delete in batches specified to avoid database contention
+      # * <tt>:batch_size</tt> - delete in batches specified to avoid database contention
       # Multiple sql deletions are executed in order to avoid database contention
       # This has no affect if used inside a transaction
       #
@@ -33,7 +33,7 @@ class ActiveRecord::Base
       #
       # Delete up to 65 red tags in batches of 20. This will execute up to
       # 4 delete statements: 3 batches of 20 and the final batch of 5.
-      #  Tag.delete_all ['name like ?', '%red%'], :limit => 65, :batch => 20
+      #  Tag.delete_all ['name like ?', '%red%'], :limit => 65, :batch_size => 20
       def delete_all_with_extension(conditions = nil, options={})
 
         #raise an error if delete is not supported and options are specified
@@ -43,7 +43,7 @@ class ActiveRecord::Base
         return delete_all_without_extension(conditions) unless options.any?
 
         #batch delete
-        return delete_all_batch(conditions, options[:batch], options[:limit]) if options[:batch]
+        return delete_all_batch(conditions, options[:batch_size], options[:limit]) if options[:batch_size]
 
         #regular delete with limit
         connection.delete(delete_all_extension_sql(conditions, options), "#{name} Delete All")

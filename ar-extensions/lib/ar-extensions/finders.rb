@@ -1,3 +1,5 @@
+require 'active_record/version'
+
 module ActiveRecord::ConnectionAdapters::Quoting
 
   alias :quote_before_arext :quote
@@ -71,8 +73,13 @@ class ActiveRecord::Base
             else
               table_name = quoted_table_name
             end
-            
-            conditions << "#{table_name}.#{connection.quote_column_name(attr)} #{attribute_condition( val )} "
+            # ActiveRecord in 2.3.1 changed the method signature for
+            # the method attribute_condition
+            if ActiveRecord::VERSION::STRING < '2.3.1'
+              conditions << "#{table_name}.#{connection.quote_column_name(attr)} #{attribute_condition( val )} "
+            else  
+              conditions << attribute_condition("#{table_name}.#{connection.quote_column_name(attr)}", val)
+            end            
             values << val
           end
         end

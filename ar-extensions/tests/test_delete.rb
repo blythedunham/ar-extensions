@@ -1,3 +1,4 @@
+ENV['ARE_DB']='mysql'
 require File.expand_path( File.join( File.dirname( __FILE__ ), 'test_helper') )
 
 
@@ -71,14 +72,14 @@ class DeleteTest < Test::Unit::TestCase
 
   def test_delete_batch_should_execute_6_deletes
     assert_query(:delete, 6){
-      assert_equal(50, Book.delete_all(nil, :batch => 10))
+      assert_equal(50, Book.delete_all(nil, :batch_size => 10))
     }
     assert_equal 0, Book.count
   end
 
   def test_delete_batch_with_limit_should_delete_until_limit_reached
     assert_query(:delete, 4){
-      assert_equal(32, Book.delete_all('id > 0', :batch => 10, :limit => 32))
+      assert_equal(32, Book.delete_all('id > 0', :batch_size => 10, :limit => 32))
     }
     assert_equal 18, Book.count
   end
@@ -86,7 +87,7 @@ class DeleteTest < Test::Unit::TestCase
 
   def test_delete_batch_default_should_delete_all
     assert_query(:delete, 1){
-      assert_equal(50, Book.delete_all(nil, :batch => true))
+      assert_equal(50, Book.delete_all(nil, :batch_size => true))
     }
     assert_equal 0, Book.count
   end
@@ -94,7 +95,7 @@ class DeleteTest < Test::Unit::TestCase
 
   def test_delete_batch_bigger_than_limit_should_delete_limit
     assert_query(:delete, 1){
-      assert_equal(12, Book.delete_all(nil, :batch => 20, :limit => 12))
+      assert_equal(12, Book.delete_all(nil, :batch_size => 20, :limit => 12))
     }
     assert_equal 38, Book.count
   end

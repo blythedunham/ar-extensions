@@ -1,6 +1,6 @@
 require File.expand_path( File.join( File.dirname( __FILE__ ), 'test_helper') )
 
-class UnionTest < Test::Unit::TestCase
+class UnionTest < TestCaseSuperClass
   self.fixtures 'books'
 
   def test_union_should_query_five_records
