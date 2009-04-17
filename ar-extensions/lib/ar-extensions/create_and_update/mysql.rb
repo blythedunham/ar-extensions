@@ -4,4 +4,7 @@
 # To include finder options, use:
 # require 'ar-extensions/create_and_update/mysql.rb'
 
+# pull in on duplicate update functionality
+require 'ar-extensions/import/mysql'
+
 ActiveRecord::Base.send :include, ActiveRecord::Extensions::CreateAndUpdate

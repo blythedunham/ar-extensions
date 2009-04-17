@@ -54,7 +54,6 @@ module ActiveRecord # :nodoc:
         sql = []
         sql << options[:pre_sql] if options[:pre_sql]
         sql << options[:command] if options[:command]
-        sql << "IGNORE" if options[:ignore]
 
         #add keywords like IGNORE or DELAYED
         if options[:keywords].is_a?(Array)
@@ -63,6 +62,8 @@ module ActiveRecord # :nodoc:
           sql << options[:keywords].to_s
         end
 
+        sql << "IGNORE" if options[:ignore]
+        
         sql
       end
 

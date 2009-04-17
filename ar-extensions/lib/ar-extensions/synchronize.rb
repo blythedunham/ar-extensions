@@ -1,5 +1,5 @@
 module ActiveRecord # :nodoc:
-  class Base # :nodoc:
+  class Base
       
     # Synchronizes the passed in ActiveRecord instances with data
     # from the database. This is like calling reload
